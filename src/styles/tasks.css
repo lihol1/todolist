@@ -1,0 +1,33 @@
+.tasks__item {
+    min-height: 80px;    
+    padding: 12px 22px 8px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--main);
+}
+
+.tasks__icon + .tasks__icon {
+    margin-left: 12px;
+}
+
+.tasks__top {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+.tasks__name {
+    font-weight: 500;
+    margin-right: 16px;
+}
+.tasks__cat {
+    display: flex;
+    line-height: 24px;
+    color: var(--main);
+}
+.tasks__cat img{
+    margin-right: 2.8px;
+}
+.tasks__description {
+    color: var(--grey);
+}

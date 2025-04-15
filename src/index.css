@@ -41,9 +41,27 @@ textarea {
 input,
 select,
 textarea {
-  width: 100%;
+  width: 100%;  
+}
+input,
+textarea { 
+  color: #000;
+}
+/* select:not(:checked) > option {
   color: var(--grey);
 }
+
+select:checked > option {
+  color: var(--grey);
+} */
+
+select {
+  
+  color:  var(--grey);
+}
+/* select option {
+  color: var(--grey);
+} */
   
 button + button {
   margin-left: 24px;

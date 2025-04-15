@@ -5,13 +5,12 @@
     top: 0;
     left: 0;
     background-color: rgba(0, 0, 0, 0.3);
-    /* min-height: 100vh;
-    overflow: hidden; */
+    
 }
 
 .modal__window {
     width: 800px;
-    height: 376px;
+    min-height: 376px;
     background-color: var(--secondary);
     box-shadow: 0px 8px 24px 0px rgba(0, 0, 0, 0.5);
     position: relative;
@@ -23,7 +22,7 @@
 }
 .modal__window--del {
     width: 600px;
-    height: 238px;
+    min-height: 238px;
 }
 .modal__cross {
     position: absolute;
@@ -42,6 +41,10 @@
     line-height: 24px;
     margin-bottom: 24px;
 }
+.modal__top, .modal__bottom {
+    margin-bottom: 24px;
+}
+
 .modal__pair {
     display: flex;
     align-items: center;
@@ -52,6 +55,7 @@
 }
 
 .modal__fieldset {
+    position: relative;
     padding: 0 8px;
     height: 56px;
     border: 2px solid var(--main);
@@ -72,14 +76,30 @@
     margin-left: 0.5px;
     color: var(--red);
 }
-
+.modal__error{
+    position: absolute;
+    top: -40px;
+    left: 10px;
+    font-size: 16px;
+    color: var(--red);
+}
 .modal__input {
+    
     width: 100%;
 }
 .modal__fieldset + .modal__fieldset {
     margin-left: 24px;
 }
+.modal__fieldset--edit input, 
+.modal__fieldset--edit textarea, 
+.modal__fieldset--edit select{
+    line-height: 20px;
+}
 
+
+.modal__fieldset--del input, textarea, select{
+    line-height: 24px;
+}
 .modal__wrapper {
   position: relative;
   display: flex;

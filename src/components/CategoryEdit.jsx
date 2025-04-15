@@ -1,21 +1,14 @@
 import { useState, useEffect, useContext } from "react";
 import { Context } from "./MyContext";
+import { getCategories, updateCategory } from "../services";
 
-export default function CategoryCreating() {
+export default function CategoryEdit() {
     const ctx = useContext(Context);
 
-    const [nameDirty, setNameisDirty] = useState(false);
-    const [nameError, setNameError] = useState("Поле не должно быть пустым");
-    const [values, setValues] = useState({
-        id: ctx.count,
-        // id: Date.now(),
-        name: "",
-        description: "",
-    });
+    const curTask = ctx.cats.find((cat) => cat.id === ctx.editId);
 
-    function blurHandler() {
-        setNameisDirty(true);
-    }
+    const [values, setValues] = useState(curTask);
+    const [nameError, setNameError] = useState("");
 
     const handleChange = (e) => {
         if (e.target.name === "name") {
@@ -32,10 +25,27 @@ export default function CategoryCreating() {
         ctx.setModalIsOpen(false);
     }
 
+    function updateCat(item, e) {
+        console.log(item);
+        e.preventDefault();
+        updateCategory(item)
+            .then(() => {
+                return getCategories();
+            })
+            .then((response) => {
+                return response.json();
+            })
+            .then((res) => {
+                console.log(res);
+                ctx.setCats(res);
+            })
+            .then(() => ctx.setModalIsOpen(false));
+    }
+
     return (
         <div className="modal__window">
             <h2 className="modal__title">
-                Создание {ctx.type === "task" ? "задачи" : "категории"}
+                Редактирование {ctx.type === "task" ? "задачи" : "категории"}
             </h2>
             <img
                 className="modal__cross"
@@ -45,11 +55,11 @@ export default function CategoryCreating() {
             />
             <form
                 className="modal__form"
-                onSubmit={(e) => ctx.addItem(values, e)}
+                onSubmit={(e) => updateCat(values, e)}
             >
                 <div className="modal__top">
                     <fieldset className="modal__fieldset">
-                        {nameDirty && nameError && (
+                        {nameError && (
                             <div className="modal__error">{nameError}</div>
                         )}
                         <legend className="modal__legend">
@@ -62,9 +72,8 @@ export default function CategoryCreating() {
                             value={values.name}
                             maxLength={255}
                             minLength={2}
-                            placeholder="Введите имя категории"
                             autoComplete="off"
-                            onBlur={blurHandler}
+                            placeholder="Введите имя категории"
                             onChange={handleChange}
                         />
                         <label htmlFor="name"></label>
@@ -91,9 +100,9 @@ export default function CategoryCreating() {
                     <button
                         type="submit"
                         className="modal__btn modal__btn--blue"
-                        // onClick={()=>ctx.addItem(values)}
+                        // onClick={() => updateCat(values)}
                     >
-                        Создать
+                        Сохранить
                     </button>
                     <button
                         type="button"

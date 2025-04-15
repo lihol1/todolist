@@ -1,69 +1,74 @@
-import { useState, useEffect } from "react";
-import { getTasks, removeTask } from "../services";
-import "../styles/tasks.css";
+import { useEffect } from "react";
+import { getTasks } from "../services";
+import "../styles/list.css";
 import { useContext } from "react";
-import { Context } from './MyContext';
-
-
-
+import { Context } from "./MyContext";
 
 export default function Tasks() {
-    const ctx = useContext(Context)
-   
-    async function getData() {        
-        const res = await getTasks(); 
-        ctx.setTasks(res); 
+    const ctx = useContext(Context);
+
+    async function getData() {
+        const response = await getTasks();
+        const res = await response.json();
+        ctx.setTasks(res);
     }
 
     useEffect(() => {
-        getData();  
-        // console.log('reload')      
-    }, [ctx.reload]);
- 
-    useEffect(()=>{
-        // console.log(ctx.editId)
-        // console.log(ctx.tasks.find((task)=> task.id === ctx.editId))
-        // console.log(1)
-        ctx.setCurrentTask(ctx.tasks.find((task)=> task.id === ctx.editId))
-    },[ctx.editId])
+        getData();
+    }, []);
 
+    useEffect(() => {
+        const curTask = ctx.tasks.find((task) => task.id === ctx.editId);
+        ctx.setCurrentTask(curTask);
+    }, [ctx.editId]);
 
-    function editTask(id){       
-        ctx.setEditId(id);  
-        ctx.setAction('edit');
-        ctx.setModalIsOpen(true); 
-    }
-    
-
-    function deleteTask (id){ 
-        ctx.setAction('delete')
-        ctx.setModalIsOpen(true)
-        // ctx.setEditId(id)
-        // ctx.setCurrentTask({id, name, categoryId, description})
-        // removeTask(id)  
+    function handleDel(id) {
+        ctx.setAction("delete");
+        ctx.setEditId(id);
+        ctx.setModalIsOpen(true);
     }
 
     return (
-        <ul className="page__tasks tasks">
+        <ul className="page__list list">
             {ctx.tasks &&
-                ctx.tasks.map(({id, name, categoryId, description}) => {
+                ctx.tasks.map(({ id, name, categoryId, description }) => {
                     return (
-                        <li className="tasks__item" key={id}>
-                            <div className="tasks__text">
-                                <div className="tasks__top">
-                                    <div className="tasks__name">{name}</div>
-                                    <div className="tasks__cat">
-                                    {categoryId && 
-                                        <img src="/folder.svg" alt="папка" /> }
-                                        <div>{categoryId ? `Категория${categoryId}` : ""}</div>
+                        <li className="list__item" key={id}>
+                            <div className="list__text">
+                                <div className="list__top">
+                                    <div className="list__name">{name}</div>
+                                    <div className="list__cat">
+                                        {categoryId && (
+                                            <img
+                                                src="/folder.svg"
+                                                alt="папка"
+                                            />
+                                        )}
+                                        <div>
+                                            {categoryId
+                                                ? `Категория${categoryId}`
+                                                : ""}
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="tasks__description">{description}</div>
-                            </div>   
-                            <div className="tasks__icons">
-                                <img className="tasks__icon" src="/pen.svg" alt="карандаш" onClick={()=>editTask(id)}/>     
-                                <img className="tasks__icon" src="/basket.svg" alt="корзина" onClick={()=>deleteTask(id)}/>    
-                            </div>                          
+                                <div className="list__description">
+                                    {description}
+                                </div>
+                            </div>
+                            <div className="list__icons">
+                                <img
+                                    className="list__icon"
+                                    src="/pen.svg"
+                                    alt="карандаш"
+                                    onClick={() => ctx.editTask(id)}
+                                />
+                                <img
+                                    className="list__icon"
+                                    src="/basket.svg"
+                                    alt="корзина"
+                                    onClick={() => handleDel(id)}
+                                />
+                            </div>
                         </li>
                     );
                 })}

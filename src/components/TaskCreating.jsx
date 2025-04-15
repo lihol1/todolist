@@ -1,66 +1,50 @@
 import { useContext, useState, useEffect } from "react";
 import { Context } from "./MyContext";
-import { addTask, getTasks } from "../services";
-import Task from "../Task.js";
 
 export default function TaskCreating() {
     const ctx = useContext(Context);
 
-    const [count, setCount] = useState(0);
     const [value, setValue] = useState("");
     const [task, setTask] = useState();
+    const [nameDirty, setNameisDirty] = useState(false);
+    const [nameError, setNameError] = useState("Поле не должно быть пустым");
     const [values, setValues] = useState({
-        id: 0,
+        id: ctx.count,
         name: "",
         description: "",
         categoryId: "",
     });
 
-    useEffect(()=>{
-      setValues({...values, id: count})
-    },[count])
+    useEffect(() => {
+        setValues({ ...values, id: ctx.count });
+    }, [ctx.count]);
 
-    useEffect(()=>{
-      console.log(values.id)
-    },[values.id])
+    useEffect(() => {
+        setTask({ ...values, id: ctx.count, categoryId: +value });
+    }, [values, value, ctx.count]);
 
-    useEffect(()=>{
-      setTask({...values, id: count, categoryId: value}) 
-    },[values, value, count])
+    function blurHandler() {
+        setNameisDirty(true);
+    }
 
     function closeModal() {
         ctx.setModalIsOpen(false);
     }
 
-    // function addNewTask(task) {
-        
-    // }
-
-    const handleChange = ({ target: { value, name } }) => {
-        setValues({ ...values, [name]: value });
+    const handleChange = (e) => {
+        if (e.target.name === "name") {
+            if (!(e.target.value.length >= 2 && e.target.value.length <= 255)) {
+                setNameError("Имя должно содержать от 2 до 255 символов");
+            } else {
+                setNameError("");
+            }
+        }
+        setValues({ ...values, [e.target.name]: e.target.value });
     };
 
     const handle = (e) => {
         setValue(e.target.value);
     };
-
-    // useEffect(() => {
-    //     setValues({ ...values, categoryId: value });
-    // }, [value, count]);
-
-    async function handleSubmit(e) {
-      setCount(count+1);
-      console.log(task)
-        if(task) {
-          const newTask = new Task(task);
-          if (newTask.name === "" || newTask.categoryId === "") return;
-          const result = await addTask(newTask);
-          ctx.setTasks(...ctx.tasks, result)
-          ctx.setModalIsOpen(false);
-        }
-        // e.preventDefault();
-        closeModal()
-    }
 
     return (
         <div className="modal__window">
@@ -73,9 +57,15 @@ export default function TaskCreating() {
                 alt="крестик"
                 onClick={closeModal}
             />
-            <form className="modal__form" onSubmit={handleSubmit}>
+            <form
+                className="modal__form"
+                onSubmit={(e) => ctx.addItem(task, e)}
+            >
                 <div className="modal__pair">
                     <fieldset className="modal__fieldset">
+                        {nameDirty && nameError && (
+                            <div className="modal__error">{nameError}</div>
+                        )}
                         <legend className="modal__legend">
                             Имя<span>&#8727;</span>
                         </legend>
@@ -88,7 +78,9 @@ export default function TaskCreating() {
                             required
                             autoComplete="off"
                             maxLength={255}
+                            minLength={2}
                             placeholder="Введите имя задачи"
+                            onBlur={blurHandler}
                             onChange={handleChange}
                         />
                         <label htmlFor="name"></label>
@@ -104,7 +96,9 @@ export default function TaskCreating() {
                                 onChange={handle}
                                 required
                             >
-                                <option value="">Выберите категорию</option>
+                                <option disabled value="">
+                                    Выберите категорию
+                                </option>
                                 <option value="1">Категория1</option>
                                 <option value="2">Категория2</option>
                                 <option value="3">Категория3</option>
@@ -127,6 +121,7 @@ export default function TaskCreating() {
                         name="description"
                         autoComplete="off"
                         maxLength={1536}
+                        minLength={2}
                         value={values.description}
                         placeholder="Введите описание задачи"
                         onChange={handleChange}
@@ -138,7 +133,7 @@ export default function TaskCreating() {
                     <button
                         type="submit"
                         className="modal__btn modal__btn--blue"
-                        // onClick={() => addNewTask(task)}
+                        // onClick={()=>ctx.addItem(task)}
                     >
                         Создать
                     </button>

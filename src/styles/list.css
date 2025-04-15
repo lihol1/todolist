@@ -1,0 +1,36 @@
+.list__item {
+    min-height: 80px;    
+    padding: 12px 22px 8px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--main);
+}
+.list__item:hover{
+    background-color: rgb(37, 127, 234, 0.2);
+}
+
+.list__icon + .list__icon {
+    margin-left: 12px;
+}
+
+.list__top {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+.list__name {
+    font-weight: 500;
+    margin-right: 16px;
+}
+.list__cat {
+    display: flex;
+    line-height: 24px;
+    color: var(--main);
+}
+.list__cat img{
+    margin-right: 2.8px;
+}
+.list__description {
+    color: var(--grey);
+}

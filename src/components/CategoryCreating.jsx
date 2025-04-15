@@ -90,8 +90,7 @@ export default function CategoryCreating() {
                 <div className="modal__buttonBlock">
                     <button
                         type="submit"
-                        className="modal__btn modal__btn--blue"
-                        // onClick={()=>ctx.addItem(values)}
+                        className="modal__btn modal__btn--blue"                       
                     >
                         Создать
                     </button>

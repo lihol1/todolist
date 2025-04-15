@@ -94,6 +94,7 @@
 .modal__fieldset--edit textarea, 
 .modal__fieldset--edit select{
     line-height: 20px;
+    color: #000;
 }
 
 

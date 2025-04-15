@@ -96,7 +96,7 @@ export default function TaskCreating() {
                                 onChange={handle}
                                 required
                             >
-                                <option disabled value="">
+                                <option value="0">
                                     Выберите категорию
                                 </option>
                                 <option value="1">Категория1</option>

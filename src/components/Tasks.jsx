@@ -38,14 +38,14 @@ export default function Tasks() {
                                 <div className="list__top">
                                     <div className="list__name">{name}</div>
                                     <div className="list__cat">
-                                        {categoryId && (
+                                        {categoryId !==0 && (
                                             <img
                                                 src="/folder.svg"
                                                 alt="папка"
                                             />
                                         )}
                                         <div>
-                                            {categoryId
+                                            {categoryId !==0 
                                                 ? `Категория${categoryId}`
                                                 : ""}
                                         </div>

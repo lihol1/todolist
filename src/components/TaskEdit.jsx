@@ -95,7 +95,7 @@ export default function TaskEdit() {
                             id="category-select"
                             onChange={handle}
                         >
-                            <option value="">Выберите категорию</option>
+                            <option value="0">Выберите категорию</option>
                             <option value="1">Категория1</option>
                             <option value="2">Категория2</option>
                             <option value="3">Категория3</option>

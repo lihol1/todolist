@@ -1,11 +1,14 @@
 import { useContext, useEffect, useState } from "react";
-import { Context } from "./MyContext";
-import { addTask, updateTask, getTasks } from "../services";
+import { TodoStore } from "../context/StoreProvider.jsx";
+import useUpdateItem from "../hooks/useUpdateItem.js"
+import { updateTask, getTasks } from "../services";
 
 export default function TaskEdit() {
-    const ctx = useContext(Context);
+    const todoStore = useContext(TodoStore);
 
-    const curTask = ctx.tasks.find((task) => task.id === ctx.editId);
+    const curTask = todoStore.tasks.find(
+        (task) => task.id === todoStore.editId
+    );
     const [nameError, setNameError] = useState("");
     const [value, setValue] = useState(curTask.categoryId);
     const [values, setValues] = useState({
@@ -14,24 +17,11 @@ export default function TaskEdit() {
         description: curTask.description,
         categoryId: value,
     });
+    const updateItem = useUpdateItem(values, todoStore.type, todoStore.setTasks, todoStore.setCategories, todoStore.setModalIsOpen);
 
     useEffect(() => {
         setValues({ ...values, categoryId: +value });
-    }, [value]);
-
-    function updateCurrentTask(task) {
-        updateTask(task)
-            .then(() => {
-                return getTasks();
-            })
-            .then((response) => {
-                return response.json();
-            })
-            .then((res) => {
-                ctx.setTasks(res);
-            })
-            .then(() => ctx.setModalIsOpen(false));
-    }
+    }, [value]);   
 
     const handleChange = (e) => {
         if (e.target.name === "name") {
@@ -47,21 +37,26 @@ export default function TaskEdit() {
     const handle = (e) => {
         setValue(e.target.value);
     };
+    function handleSubmit(e){
+        e.preventDefault();
+        updateItem();
+    }
 
     return (
         <div className="modal__window">
             <h2 className="modal__title">
-                Редактирование {ctx.type === "task" ? "задачи" : "категории"}
+                Редактирование{" "}
+                {todoStore.type === "task" ? "задачи" : "категории"}
             </h2>
             <img
                 className="modal__cross"
                 src="/cross.svg"
                 alt="крестик"
-                onClick={() => ctx.setModalIsOpen(false)}
+                onClick={() => todoStore.setModalIsOpen(false)}
             />
             <form
                 className="modal__form"
-                onSubmit={(e) => updateCurrentTask(values, e)}
+                onSubmit={handleSubmit}
             >
                 <div className="modal__pair">
                     <fieldset className="modal__fieldset modal__fieldset--edit">
@@ -127,15 +122,14 @@ export default function TaskEdit() {
                 <div className="modal__buttonBlock">
                     <button
                         type="submit"
-                        className="modal__btn modal__btn--blue"
-                        // onClick={() => updateCurrentTask(values)}
+                        className="modal__btn modal__btn--blue"                      
                     >
                         Сохранить
                     </button>
                     <button
                         type="button"
                         className="modal__btn"
-                        onClick={() => ctx.setModalIsOpen(false)}
+                        onClick={() => todoStore.setModalIsOpen(false)}
                     >
                         Закрыть
                     </button>

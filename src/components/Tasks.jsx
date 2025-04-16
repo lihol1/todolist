@@ -2,15 +2,15 @@ import { useEffect } from "react";
 import { getTasks } from "../services";
 import "../styles/list.css";
 import { useContext } from "react";
-import { Context } from "./MyContext";
+import { TodoStore } from "../context/StoreProvider.jsx";
 
 export default function Tasks() {
-    const ctx = useContext(Context);
-
+    const todoStore = useContext(TodoStore);
+    
     async function getData() {
         const response = await getTasks();
         const res = await response.json();
-        ctx.setTasks(res);
+        todoStore.setTasks(res);
     }
 
     useEffect(() => {
@@ -18,34 +18,36 @@ export default function Tasks() {
     }, []);
 
     useEffect(() => {
-        const curTask = ctx.tasks.find((task) => task.id === ctx.editId);
-        ctx.setCurrentTask(curTask);
-    }, [ctx.editId]);
+        const curTask = todoStore.tasks.find(
+            (task) => task.id === todoStore.editId
+        );
+        todoStore.setCurrentTask(curTask);
+    }, [todoStore.editId]);
 
     function handleDel(id) {
-        ctx.setAction("delete");
-        ctx.setEditId(id);
-        ctx.setModalIsOpen(true);
+        todoStore.setAction("delete");
+        todoStore.setEditId(id);
+        todoStore.setModalIsOpen(true);
     }
 
     return (
         <ul className="page__list list">
-            {ctx.tasks &&
-                ctx.tasks.map(({ id, name, categoryId, description }) => {
+            {todoStore.tasks &&
+                todoStore.tasks.map(({ id, name, categoryId, description }) => {
                     return (
                         <li className="list__item" key={id}>
                             <div className="list__text">
                                 <div className="list__top">
                                     <div className="list__name">{name}</div>
                                     <div className="list__cat">
-                                        {categoryId !==0 && (
+                                        {categoryId !== 0 && (
                                             <img
                                                 src="/folder.svg"
                                                 alt="папка"
                                             />
                                         )}
                                         <div>
-                                            {categoryId !==0 
+                                            {categoryId !== 0
                                                 ? `Категория${categoryId}`
                                                 : ""}
                                         </div>
@@ -60,7 +62,7 @@ export default function Tasks() {
                                     className="list__icon"
                                     src="/pen.svg"
                                     alt="карандаш"
-                                    onClick={() => ctx.editTask(id)}
+                                    onClick={() => todoStore.editTask(id)}
                                 />
                                 <img
                                     className="list__icon"

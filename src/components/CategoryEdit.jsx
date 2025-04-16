@@ -1,14 +1,18 @@
 import { useState, useEffect, useContext } from "react";
-import { Context } from "./MyContext";
+import { TodoStore } from "../context/StoreProvider.jsx";
 import { getCategories, updateCategory } from "../services";
+import useUpdateItem from "../hooks/useUpdateItem.js"
 
 export default function CategoryEdit() {
-    const ctx = useContext(Context);
+    const todoStore = useContext(TodoStore);
 
-    const curTask = ctx.cats.find((cat) => cat.id === ctx.editId);
+    const curTask = todoStore.categories.find(
+        (cat) => cat.id === todoStore.editId
+    );
 
     const [values, setValues] = useState(curTask);
     const [nameError, setNameError] = useState("");
+    const updateItem = useUpdateItem(values, todoStore.type, todoStore.setTasks, todoStore.setCategories, todoStore.setModalIsOpen);
 
     const handleChange = (e) => {
         if (e.target.name === "name") {
@@ -22,30 +26,18 @@ export default function CategoryEdit() {
     };
 
     function closeModal() {
-        ctx.setModalIsOpen(false);
+        todoStore.setModalIsOpen(false);
     }
-
-    function updateCat(item, e) {
-        console.log(item);
+    function handleSubmit(e){
         e.preventDefault();
-        updateCategory(item)
-            .then(() => {
-                return getCategories();
-            })
-            .then((response) => {
-                return response.json();
-            })
-            .then((res) => {
-                console.log(res);
-                ctx.setCats(res);
-            })
-            .then(() => ctx.setModalIsOpen(false));
-    }
+        updateItem();
+    }   
 
     return (
         <div className="modal__window">
             <h2 className="modal__title">
-                Редактирование {ctx.type === "task" ? "задачи" : "категории"}
+                Редактирование{" "}
+                {todoStore.type === "task" ? "задачи" : "категории"}
             </h2>
             <img
                 className="modal__cross"
@@ -55,7 +47,7 @@ export default function CategoryEdit() {
             />
             <form
                 className="modal__form"
-                onSubmit={(e) => updateCat(values, e)}
+                onSubmit={handleSubmit}
             >
                 <div className="modal__top">
                     <fieldset className="modal__fieldset">
@@ -99,8 +91,7 @@ export default function CategoryEdit() {
                 <div className="modal__buttonBlock">
                     <button
                         type="submit"
-                        className="modal__btn modal__btn--blue"
-                        // onClick={() => updateCat(values)}
+                        className="modal__btn modal__btn--blue"                        
                     >
                         Сохранить
                     </button>

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Context } from "./MyContext";
+import { TodoStore } from "../context/StoreProvider.jsx";
 import TaskCreating from "./TaskCreating";
 import TaskEdit from "./TaskEdit";
 import ItemDelete from "./ItemDelete";
@@ -8,21 +8,25 @@ import CategoryEdit from "./CategoryEdit";
 import "../styles/modal.css";
 
 export default function Modal() {
-    const ctx = useContext(Context);
+    const todoStore = useContext(TodoStore);
 
     return (
         <>
-            {ctx.modalIsOpen && (
+            {todoStore.modalIsOpen && (
                 <div className="page__modal modal">
-                    {ctx.action === "delete" ? (
+                    {todoStore.action === "delete" ? (
                         <ItemDelete />
-                    ) : ctx.type === "task" && ctx.action === "create" ? (
+                    ) : todoStore.type === "task" &&
+                      todoStore.action === "create" ? (
                         <TaskCreating />
-                    ) : ctx.type === "task" && ctx.action === "edit" ? (
+                    ) : todoStore.type === "task" &&
+                      todoStore.action === "edit" ? (
                         <TaskEdit />
-                    ) : ctx.type === "category" && ctx.action === "create" ? (
+                    ) : todoStore.type === "category" &&
+                      todoStore.action === "create" ? (
                         <CategoryCreating />
-                    ) : ctx.type === "category" && ctx.action === "edit" ? (
+                    ) : todoStore.type === "category" &&
+                      todoStore.action === "edit" ? (
                         <CategoryEdit />
                     ) : (
                         ""

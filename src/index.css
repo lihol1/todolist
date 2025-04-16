@@ -4,13 +4,10 @@
 :root {
   --main: #3F72AF;
   --secondary: #DBE2EF;  
-  --light-blue: #8FB6FF;/* нажатая кнопка задач,категорий*/  
-  /* background: rgba(37, 127, 234, 0.2);   */
-  --hover-blue: #257FEA ;
+  --light-blue: #8FB6FF;  
+  --hover-blue: rgba(37, 127, 234, 0.2);
   --grey: #808080;
   --red: #EC1D1D;
-  /* --focused-blue: 257FEA 20% focused task */
-
 }
 
 
@@ -47,22 +44,11 @@ input,
 textarea { 
   color: #000;
 }
-/* select:not(:checked) > option {
-  color: var(--grey);
-}
 
-select:checked > option {
-  color: var(--grey);
-} */
-
-select {
-  
+select {  
   color:  var(--grey);
 }
-/* select option {
-  color: var(--grey);
-} */
-  
+
 button + button {
   margin-left: 24px;
 }

@@ -1,20 +1,23 @@
-import { useState, useEffect, useContext } from "react";
-import { Context } from "./MyContext";
+import { useState, useContext } from "react";
+import { TodoStore } from "../context/StoreProvider.jsx";
+import useAddItem from "../hooks/useAddItem.js";
 
 export default function CategoryCreating() {
-    const ctx = useContext(Context);
+    const todoStore = useContext(TodoStore);
 
-    const [nameDirty, setNameisDirty] = useState(false);
+    const [nameDirty, setNameIsDirty] = useState(false);
     const [nameError, setNameError] = useState("Поле не должно быть пустым");
     const [values, setValues] = useState({
-        id: ctx.count,
+        id: todoStore.count,
         // id: Date.now(),
         name: "",
         description: "",
     });
+          
+    const addItem = useAddItem(values, todoStore.type, todoStore.count, todoStore.setCount, todoStore.setTasks, todoStore.setCategories, todoStore.setModalIsOpen)
 
     function blurHandler() {
-        setNameisDirty(true);
+        setNameIsDirty(true);
     }
 
     const handleChange = (e) => {
@@ -29,13 +32,17 @@ export default function CategoryCreating() {
     };
 
     function closeModal() {
-        ctx.setModalIsOpen(false);
+        todoStore.setModalIsOpen(false);
+    }
+    function handleSubmit(e){
+        e.preventDefault();
+        addItem();
     }
 
     return (
         <div className="modal__window">
             <h2 className="modal__title">
-                Создание {ctx.type === "task" ? "задачи" : "категории"}
+                Создание {todoStore.type === "task" ? "задачи" : "категории"}
             </h2>
             <img
                 className="modal__cross"
@@ -45,7 +52,7 @@ export default function CategoryCreating() {
             />
             <form
                 className="modal__form"
-                onSubmit={(e) => ctx.addItem(values, e)}
+                onSubmit={handleSubmit}
             >
                 <div className="modal__top">
                     <fieldset className="modal__fieldset">
@@ -59,13 +66,13 @@ export default function CategoryCreating() {
                             type="text"
                             id="name"
                             name="name"
-                            value={values.name}
+                            value={values.name} 
                             maxLength={255}
                             minLength={2}
                             placeholder="Введите имя категории"
                             autoComplete="off"
                             onBlur={blurHandler}
-                            onChange={handleChange}
+                            onChange={handleChange}                                                        
                         />
                         <label htmlFor="name"></label>
                     </fieldset>
@@ -79,10 +86,10 @@ export default function CategoryCreating() {
                             name="description"
                             autoComplete="off"
                             maxLength={512}
-                            minLength={2}
-                            value={values.description}
-                            placeholder="Введите описание задачи"
-                            onChange={handleChange}
+                            minLength={2}   
+                            value={values.description}                    
+                            onChange={handleChange}  
+                            placeholder="Введите описание задачи"                           
                         />
                         <label htmlFor="description"></label>
                     </fieldset>
@@ -90,7 +97,7 @@ export default function CategoryCreating() {
                 <div className="modal__buttonBlock">
                     <button
                         type="submit"
-                        className="modal__btn modal__btn--blue"                       
+                        className="modal__btn modal__btn--blue"
                     >
                         Создать
                     </button>

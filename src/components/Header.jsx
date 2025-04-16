@@ -1,17 +1,17 @@
-import { useContext } from "react";
-import { Context } from "./MyContext";
+import { useContext, useEffect } from "react";
+import { TodoStore } from "../context/StoreProvider.jsx";
 import "../styles/header.css";
 
-export default function Header() {
-    const ctx = useContext(Context);
+export default function Header() {    
+    const todoStore = useContext(TodoStore);
 
     function handleClick(type) {
-        ctx.setType(type);
+        todoStore.setType(type);
     }
 
     function openModal() {
-        ctx.setAction("create");
-        ctx.setModalIsOpen(true);
+        todoStore.setAction("create");
+        todoStore.setModalIsOpen(true);
     }
 
     return (
@@ -20,10 +20,12 @@ export default function Header() {
             <nav className="header__nav">
                 <button
                     className={`header__button header__btntask ${
-                        ctx.type === "task" ? "header__button--active" : ""
+                        todoStore.type === "task"
+                            ? "header__button--active"
+                            : ""
                     }`}
                     type="button"
-                    onClick={() => handleClick("task")}
+                    onClick={() => handleClick("task")}                    
                 >
                     Задачи
                 </button>
@@ -31,16 +33,18 @@ export default function Header() {
                 <div className="header__border"></div>
                 <button
                     className={`header__button ${
-                        ctx.type !== "task" ? "header__button--active" : ""
+                        todoStore.type !== "task"
+                            ? "header__button--active"
+                            : ""
                     }`}
                     type="button"
-                    onClick={() => handleClick("category")}
+                    onClick={() => handleClick("category")}                   
                 >
                     Категории
                 </button>
             </nav>
             <button className="header__add" type="button" onClick={openModal}>
-                Добавить {ctx.type === "task" ? "задачу" : "категорию"}
+                Добавить {todoStore.type === "task" ? "задачу" : "категорию"}
             </button>
         </header>
     );

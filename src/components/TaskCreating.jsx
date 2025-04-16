@@ -1,34 +1,41 @@
 import { useContext, useState, useEffect } from "react";
-import { Context } from "./MyContext";
+import { TodoStore } from "../context/StoreProvider.jsx";
+import useAddItem from "../hooks/useAddItem.js";
 
 export default function TaskCreating() {
-    const ctx = useContext(Context);
+    const todoStore = useContext(TodoStore);   
 
     const [value, setValue] = useState("");
     const [task, setTask] = useState();
     const [nameDirty, setNameisDirty] = useState(false);
     const [nameError, setNameError] = useState("Поле не должно быть пустым");
     const [values, setValues] = useState({
-        id: ctx.count,
+        id: todoStore.count,
         name: "",
         description: "",
         categoryId: "",
     });
+    const addItem = useAddItem(task, todoStore.type, todoStore.count, todoStore.setCount, todoStore.setTasks, todoStore.setCategories, todoStore.setModalIsOpen)
 
     useEffect(() => {
-        setValues({ ...values, id: ctx.count });
-    }, [ctx.count]);
+        setValues({ ...values, id: todoStore.count });
+    }, [todoStore.count]);
 
     useEffect(() => {
-        setTask({ ...values, id: ctx.count, categoryId: +value });
-    }, [values, value, ctx.count]);
+        setTask({ ...values, id: todoStore.count, categoryId: +value });
+    }, [values, value, todoStore.count]);
+
+    function handleSubmit(e){
+        e.preventDefault();
+        addItem();
+    }
 
     function blurHandler() {
         setNameisDirty(true);
     }
 
     function closeModal() {
-        ctx.setModalIsOpen(false);
+        todoStore.setModalIsOpen(false);
     }
 
     const handleChange = (e) => {
@@ -45,15 +52,12 @@ export default function TaskCreating() {
     const handle = (e) => {
         setValue(e.target.value);
     };
-    function resetSelect (e){
-        console.log(e)       
-        console.log(this)       
-    }
+    
 
     return (
         <div className="modal__window">
             <h2 className="modal__title">
-                Создание {ctx.type === "task" ? "задачи" : "категории"}
+                Создание {todoStore.type === "task" ? "задачи" : "категории"}
             </h2>
             <img
                 className="modal__cross"
@@ -63,7 +67,7 @@ export default function TaskCreating() {
             />
             <form
                 className="modal__form"
-                onSubmit={(e) => ctx.addItem(task, e)}
+                onSubmit={handleSubmit}
             >
                 <div className="modal__pair">
                     <fieldset className="modal__fieldset">
@@ -100,9 +104,7 @@ export default function TaskCreating() {
                                 onChange={handle}
                                 required
                             >
-                                <option value="0">
-                                    Выберите категорию
-                                </option>
+                                <option value="0">Выберите категорию</option>
                                 <option value="1">Категория1</option>
                                 <option value="2">Категория2</option>
                                 <option value="3">Категория3</option>
@@ -137,7 +139,7 @@ export default function TaskCreating() {
                     <button
                         type="submit"
                         className="modal__btn modal__btn--blue"
-                        // onClick={()=>ctx.addItem(task)}
+                        // onClick={()=>todoStore.addItem(task)}
                     >
                         Создать
                     </button>

@@ -1,17 +1,10 @@
-import { addTask, addCategory, getTasks, getCategories } from "../services";
-import Category from "../Category";
-import Task from "../Task";
+import { updateTask, updateCategory, getTasks, getCategories } from "../services";
 
-
-export default function useAddItem(item, type, count, setCount, setTasks, setCategories, setModalIsOpen) {
-    return () => { 
-        if (item) {            
-            setCount(count + 1);
-
+export default function updateItem(item,type, setTasks,setCategories, setModalIsOpen) {
+    return () => {
+        if (item) {
             if (type === "task") {
-                const newTask = new Task(item);               
-
-                addTask(newTask)
+                updateTask(item)
                     .then(() => {
                         return getTasks();
                     })
@@ -19,13 +12,11 @@ export default function useAddItem(item, type, count, setCount, setTasks, setCat
                         return response.json();
                     })
                     .then((res) => {
-                        console.log(res);
                         setTasks(res);
                     })
                     .then(() => setModalIsOpen(false));
-            } else if (type === "category") {
-                const newCat = new Category(item);
-                addCategory(newCat)
+            } else {
+                updateCategory(item)
                     .then(() => {
                         return getCategories();
                     })

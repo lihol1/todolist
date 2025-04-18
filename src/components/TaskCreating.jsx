@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import { TodoStore } from "../context/StoreProvider.jsx";
-import useAddItem from "../hooks/useAddItem.js";
+import addItem from "../utils/addItem.js";
 
 export default function TaskCreating() {
     const todoStore = useContext(TodoStore);   
@@ -15,7 +15,7 @@ export default function TaskCreating() {
         description: "",
         categoryId: "",
     });
-    const addItem = useAddItem(task, todoStore.type, todoStore.count, todoStore.setCount, todoStore.setTasks, todoStore.setCategories, todoStore.setModalIsOpen)
+    const addNewItem = addItem(task, todoStore.type, todoStore.count, todoStore.setCount, todoStore.setTasks, todoStore.setCategories, todoStore.setModalIsOpen)
 
     useEffect(() => {
         setValues({ ...values, id: todoStore.count });
@@ -27,7 +27,7 @@ export default function TaskCreating() {
 
     function handleSubmit(e){
         e.preventDefault();
-        addItem();
+        addNewItem();
     }
 
     function blurHandler() {

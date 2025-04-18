@@ -1,13 +1,13 @@
 import { useContext } from "react";
 import { TodoStore } from "../context/StoreProvider.jsx";
-import useDeleteItem from "../hooks/useDeleteItem";
+import deleteItem from "../utils/deleteItem";
 
 export default function ItemDelete() {
     const todoStore = useContext(TodoStore);
     // useDeleteItem(todoStore.editId, e, todoStore.type, todoStore.setTasks, todoStore.setCategories, todoStore.setModalIsOpen)
 
     // console.log(todoStore.categories.find((cat) => cat.id === todoStore.editId))   ?????????????
-    const deleteItem = useDeleteItem(
+    const deleteCurrentItem = deleteItem(
         todoStore.editId,
         todoStore.type,
         todoStore.setTasks,
@@ -41,7 +41,7 @@ export default function ItemDelete() {
                     // onClick={(e) => todoStore.deleteItem(todoStore.editId, e)}
                     // onClick={(e) => useDeleteItem(todoStore.editId, e, todoStore.type, todoStore.setTasks, todoStore.setCategories, todoStore.setModalIsOpen)}
                     // onClick={(e)=>deleteItem(todoStore.editId, e, todoStore.type, todoStore.setTasks, todoStore.setCategories, todoStore.setModalIsOpen)}
-                    onClick={deleteItem}
+                    onClick={deleteCurrentItem}
                 >
                     Да
                 </button>

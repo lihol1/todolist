@@ -1,7 +1,7 @@
 import { removeTask, removeCategory, getTasks, getCategories } from "../services";
 
 
-export default function useDeleteItem(id, type, setTasks, setCategories, setModalIsOpen){
+export default function deleteItem(id, type, setTasks, setCategories, setModalIsOpen){
 
 return () => {    
               if (id) {             

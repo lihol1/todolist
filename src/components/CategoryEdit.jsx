@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { TodoStore } from "../context/StoreProvider.jsx";
 import { getCategories, updateCategory } from "../services";
-import useUpdateItem from "../hooks/useUpdateItem.js"
+import updateItem from "../utils/updateItem.js";
 
 export default function CategoryEdit() {
     const todoStore = useContext(TodoStore);
@@ -12,7 +12,7 @@ export default function CategoryEdit() {
 
     const [values, setValues] = useState(curTask);
     const [nameError, setNameError] = useState("");
-    const updateItem = useUpdateItem(values, todoStore.type, todoStore.setTasks, todoStore.setCategories, todoStore.setModalIsOpen);
+    const updateCurrentItem = updateItem(values, todoStore.type, todoStore.setTasks, todoStore.setCategories, todoStore.setModalIsOpen);
 
     const handleChange = (e) => {
         if (e.target.name === "name") {
@@ -30,7 +30,7 @@ export default function CategoryEdit() {
     }
     function handleSubmit(e){
         e.preventDefault();
-        updateItem();
+        updateCurrentItem();
     }   
 
     return (

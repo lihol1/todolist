@@ -1,9 +1,12 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useRef } from "react";
 import { TodoStore } from "../context/StoreProvider.jsx";
-import useAddItem from "../hooks/useAddItem.js";
+import addItem from "../utils/addItem.js";
 
 export default function CategoryCreating() {
     const todoStore = useContext(TodoStore);
+    const ref = useRef(null)
+    console.log(ref)
+    console.log(ref.current)
 
     const [nameDirty, setNameIsDirty] = useState(false);
     const [nameError, setNameError] = useState("Поле не должно быть пустым");
@@ -14,7 +17,7 @@ export default function CategoryCreating() {
         description: "",
     });
           
-    const addItem = useAddItem(values, todoStore.type, todoStore.count, todoStore.setCount, todoStore.setTasks, todoStore.setCategories, todoStore.setModalIsOpen)
+    const addCurrentItem = addItem(values, todoStore.type, todoStore.count, todoStore.setCount, todoStore.setTasks, todoStore.setCategories, todoStore.setModalIsOpen)
 
     function blurHandler() {
         setNameIsDirty(true);
@@ -36,7 +39,7 @@ export default function CategoryCreating() {
     }
     function handleSubmit(e){
         e.preventDefault();
-        addItem();
+        addCurrentItem();
     }
 
     return (
@@ -62,7 +65,7 @@ export default function CategoryCreating() {
                         <legend className="modal__legend">
                             Имя<span>&#8727;</span>
                         </legend>
-                        <input
+                        <input ref={ref}
                             type="text"
                             id="name"
                             name="name"

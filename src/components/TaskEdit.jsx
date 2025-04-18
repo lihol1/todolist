@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { TodoStore } from "../context/StoreProvider.jsx";
-import useUpdateItem from "../hooks/useUpdateItem.js"
+import updateItem from "../utils/updateItem.js"
 import { updateTask, getTasks } from "../services";
 
 export default function TaskEdit() {
@@ -17,7 +17,7 @@ export default function TaskEdit() {
         description: curTask.description,
         categoryId: value,
     });
-    const updateItem = useUpdateItem(values, todoStore.type, todoStore.setTasks, todoStore.setCategories, todoStore.setModalIsOpen);
+    const updateCurrentItem = updateItem(values, todoStore.type, todoStore.setTasks, todoStore.setCategories, todoStore.setModalIsOpen);
 
     useEffect(() => {
         setValues({ ...values, categoryId: +value });
@@ -39,7 +39,7 @@ export default function TaskEdit() {
     };
     function handleSubmit(e){
         e.preventDefault();
-        updateItem();
+        updateCurrentItem();
     }
 
     return (

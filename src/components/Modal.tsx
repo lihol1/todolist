@@ -1,14 +1,14 @@
-import { useContext } from "react";
-import { TodoStore } from "../context/StoreProvider.jsx";
-import TaskCreating from "./TaskCreating";
-import TaskEdit from "./TaskEdit";
-import ItemDelete from "./ItemDelete";
-import CategoryCreating from "./CategoryCreating";
-import CategoryEdit from "./CategoryEdit";
+import TaskCreating from "./TaskCreating.jsx";
+import TaskEdit from "./TaskEdit.jsx";
+import ItemDelete from "./ItemDelete.js";
+import CategoryCreating from "./CategoryCreating.js";
+import CategoryEdit from "./CategoryEdit.js";
 import "../styles/modal.css";
+import React from "react";
+import { useStoreContext } from "../hooks/useStoreContext.js";
 
 export default function Modal() {
-    const todoStore = useContext(TodoStore);
+    const todoStore = useStoreContext();
 
     return (
         <>

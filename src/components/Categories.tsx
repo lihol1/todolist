@@ -1,33 +1,31 @@
 import { useEffect } from "react";
-import { getCategories } from "../services";
+import { getCategories } from "../services.js";
 import "../styles/list.css";
-import { useContext } from "react";
-import { TodoStore } from "../context/StoreProvider.jsx";
+import React from "react";
+import { useStoreContext } from "../hooks/useStoreContext.js";
 
 export default function list() {
-    const todoStore = useContext(TodoStore);
+    const todoStore = useStoreContext();
 
     async function getData() {
         const response = await getCategories();
-        const res = await response.json();
-        todoStore.setCategories(res);
+        if (response instanceof Response) {
+            const res = await response.json();
+            todoStore.setCategories(res);
+        }
     }
 
     useEffect(() => {
         getData();
     }, []);
 
-    // useEffect(()=>{
-    //     const curCat = todoStore.categories.find((cat)=> cat.id === todoStore.editId)
-    // },[todoStore.editId])
-
-    function editCategory(id) {
+    function editCategory(id: number) {
         todoStore.setEditId(id);
         todoStore.setAction("edit");
         todoStore.setModalIsOpen(true);
     }
 
-    function handleDelete(id) {
+    function handleDelete(id: number) {
         todoStore.setAction("delete");
         todoStore.setEditId(id);
         todoStore.setModalIsOpen(true);

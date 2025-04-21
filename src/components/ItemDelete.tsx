@@ -1,12 +1,10 @@
-import { useContext } from "react";
-import { TodoStore } from "../context/StoreProvider.jsx";
-import deleteItem from "../utils/deleteItem";
+import deleteItem from "../utils/deleteItem.js";
+import React from "react";
+import { useStoreContext } from "../hooks/useStoreContext.js";
 
 export default function ItemDelete() {
-    const todoStore = useContext(TodoStore);
-    // useDeleteItem(todoStore.editId, e, todoStore.type, todoStore.setTasks, todoStore.setCategories, todoStore.setModalIsOpen)
+    const todoStore = useStoreContext();
 
-    // console.log(todoStore.categories.find((cat) => cat.id === todoStore.editId))   ?????????????
     const deleteCurrentItem = deleteItem(
         todoStore.editId,
         todoStore.type,
@@ -38,9 +36,6 @@ export default function ItemDelete() {
             <div className="modal__buttonBlock">
                 <button
                     className="modal__btn modal__btn--blue modal__btn--del"
-                    // onClick={(e) => todoStore.deleteItem(todoStore.editId, e)}
-                    // onClick={(e) => useDeleteItem(todoStore.editId, e, todoStore.type, todoStore.setTasks, todoStore.setCategories, todoStore.setModalIsOpen)}
-                    // onClick={(e)=>deleteItem(todoStore.editId, e, todoStore.type, todoStore.setTasks, todoStore.setCategories, todoStore.setModalIsOpen)}
                     onClick={deleteCurrentItem}
                 >
                     Да

@@ -1,11 +1,12 @@
-import { useContext, useEffect } from "react";
-import { TodoStore } from "../context/StoreProvider.jsx";
 import "../styles/header.css";
+import React from "react";
+import { useStoreContext } from "../hooks/useStoreContext.js";
 
-export default function Header() {    
-    const todoStore = useContext(TodoStore);
+export default function Header() {
+    // const todoStore = useContext(TodoStore);
+    const todoStore = useStoreContext();
 
-    function handleClick(type) {
+    function handleClick(type: string) {
         todoStore.setType(type);
     }
 
@@ -25,7 +26,7 @@ export default function Header() {
                             : ""
                     }`}
                     type="button"
-                    onClick={() => handleClick("task")}                    
+                    onClick={() => handleClick("task")}
                 >
                     Задачи
                 </button>
@@ -38,7 +39,7 @@ export default function Header() {
                             : ""
                     }`}
                     type="button"
-                    onClick={() => handleClick("category")}                   
+                    onClick={() => handleClick("category")}
                 >
                     Категории
                 </button>

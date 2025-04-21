@@ -1,29 +1,42 @@
-import { useContext, useEffect, useState } from "react";
-import { TodoStore } from "../context/StoreProvider.jsx";
-import updateItem from "../utils/updateItem.js"
-import { updateTask, getTasks } from "../services";
+import { useEffect, useState } from "react";
+import updateItem from "../utils/updateItem.js";
+import React from "react";
+import { Task } from "../types.js";
+import { useStoreContext } from "../hooks/useStoreContext.js";
 
 export default function TaskEdit() {
-    const todoStore = useContext(TodoStore);
+    const todoStore = useStoreContext();
 
     const curTask = todoStore.tasks.find(
-        (task) => task.id === todoStore.editId
+        (task: Task) => task.id === todoStore.editId
     );
+
     const [nameError, setNameError] = useState("");
-    const [value, setValue] = useState(curTask.categoryId);
-    const [values, setValues] = useState({
-        id: curTask.id,
-        name: curTask.name,
-        description: curTask.description,
-        categoryId: value,
+    const [value, setValue] = useState(curTask?.categoryId ?? "");
+
+    const [values, setValues] = useState<Task>({
+        id: curTask?.id ?? -1,
+        name: curTask?.name ?? "",
+        description: curTask?.description ?? "",
+        categoryId: +value,
     });
-    const updateCurrentItem = updateItem(values, todoStore.type, todoStore.setTasks, todoStore.setCategories, todoStore.setModalIsOpen);
+    const updateCurrentItem = updateItem(
+        values,
+        todoStore.type,
+        todoStore.setTasks,
+        todoStore.setCategories,
+        todoStore.setModalIsOpen
+    );
 
     useEffect(() => {
         setValues({ ...values, categoryId: +value });
-    }, [value]);   
+    }, [value]);
 
-    const handleChange = (e) => {
+    const handleChange = (
+        e:
+            | React.ChangeEvent<HTMLInputElement>
+            | React.ChangeEvent<HTMLTextAreaElement>
+    ) => {
         if (e.target.name === "name") {
             if (!(e.target.value.length >= 2 && e.target.value.length <= 255)) {
                 setNameError("Имя должно содержать от 2 до 255 символов");
@@ -34,10 +47,10 @@ export default function TaskEdit() {
         setValues({ ...values, [e.target.name]: e.target.value });
     };
 
-    const handle = (e) => {
-        setValue(e.target.value);
+    const handle = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setValue(+e.target.value);
     };
-    function handleSubmit(e){
+    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         updateCurrentItem();
     }
@@ -54,10 +67,7 @@ export default function TaskEdit() {
                 alt="крестик"
                 onClick={() => todoStore.setModalIsOpen(false)}
             />
-            <form
-                className="modal__form"
-                onSubmit={handleSubmit}
-            >
+            <form className="modal__form" onSubmit={handleSubmit}>
                 <div className="modal__pair">
                     <fieldset className="modal__fieldset modal__fieldset--edit">
                         {nameError && (
@@ -76,7 +86,6 @@ export default function TaskEdit() {
                             maxLength={255}
                             minLength={2}
                             placeholder="Введите имя задачи"
-                            // onBlur={blurHandler}
                             onChange={handleChange}
                         />
                         <label htmlFor="name"></label>
@@ -107,7 +116,6 @@ export default function TaskEdit() {
                     <legend className="modal__legend">Описание</legend>
                     <textarea
                         className="modal__textarea"
-                        type="text"
                         id="description"
                         name="description"
                         maxLength={1536}
@@ -122,7 +130,7 @@ export default function TaskEdit() {
                 <div className="modal__buttonBlock">
                     <button
                         type="submit"
-                        className="modal__btn modal__btn--blue"                      
+                        className="modal__btn modal__btn--blue"
                     >
                         Сохранить
                     </button>

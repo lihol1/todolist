@@ -1,12 +1,14 @@
-import { useContext, useState, useEffect } from "react";
-import { TodoStore } from "../context/StoreProvider.jsx";
+import { useState, useEffect } from "react";
 import addItem from "../utils/addItem.js";
+import { useStoreContext } from "../hooks/useStoreContext.js";
+import React from "react";
+import { Task } from "../types.js";
 
 export default function TaskCreating() {
-    const todoStore = useContext(TodoStore);   
+    const todoStore = useStoreContext();
 
     const [value, setValue] = useState("");
-    const [task, setTask] = useState();
+    const [task, setTask] = useState<Task>();
     const [nameDirty, setNameisDirty] = useState(false);
     const [nameError, setNameError] = useState("Поле не должно быть пустым");
     const [values, setValues] = useState({
@@ -15,7 +17,15 @@ export default function TaskCreating() {
         description: "",
         categoryId: "",
     });
-    const addNewItem = addItem(task, todoStore.type, todoStore.count, todoStore.setCount, todoStore.setTasks, todoStore.setCategories, todoStore.setModalIsOpen)
+    const addNewItem = addItem(
+        task,
+        todoStore.type,
+        todoStore.count,
+        todoStore.setCount,
+        todoStore.setTasks,
+        todoStore.setCategories,
+        todoStore.setModalIsOpen
+    );
 
     useEffect(() => {
         setValues({ ...values, id: todoStore.count });
@@ -25,7 +35,7 @@ export default function TaskCreating() {
         setTask({ ...values, id: todoStore.count, categoryId: +value });
     }, [values, value, todoStore.count]);
 
-    function handleSubmit(e){
+    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         addNewItem();
     }
@@ -38,7 +48,11 @@ export default function TaskCreating() {
         todoStore.setModalIsOpen(false);
     }
 
-    const handleChange = (e) => {
+    const handleChange = (
+        e:
+            | React.ChangeEvent<HTMLInputElement>
+            | React.ChangeEvent<HTMLTextAreaElement>
+    ) => {
         if (e.target.name === "name") {
             if (!(e.target.value.length >= 2 && e.target.value.length <= 255)) {
                 setNameError("Имя должно содержать от 2 до 255 символов");
@@ -49,10 +63,9 @@ export default function TaskCreating() {
         setValues({ ...values, [e.target.name]: e.target.value });
     };
 
-    const handle = (e) => {
+    const handle = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setValue(e.target.value);
     };
-    
 
     return (
         <div className="modal__window">
@@ -65,10 +78,7 @@ export default function TaskCreating() {
                 alt="крестик"
                 onClick={closeModal}
             />
-            <form
-                className="modal__form"
-                onSubmit={handleSubmit}
-            >
+            <form className="modal__form" onSubmit={handleSubmit}>
                 <div className="modal__pair">
                     <fieldset className="modal__fieldset">
                         {nameDirty && nameError && (
@@ -122,7 +132,6 @@ export default function TaskCreating() {
                     <legend className="modal__legend">Описание</legend>
                     <textarea
                         className="modal__textarea"
-                        type="text"
                         id="description"
                         name="description"
                         autoComplete="off"
@@ -139,7 +148,6 @@ export default function TaskCreating() {
                     <button
                         type="submit"
                         className="modal__btn modal__btn--blue"
-                        // onClick={()=>todoStore.addItem(task)}
                     >
                         Создать
                     </button>

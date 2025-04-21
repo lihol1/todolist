@@ -1,13 +1,13 @@
-import Header from "./components/Header.jsx";
-import Tasks from "./components/Tasks";
-import Categories from "./components/Categories";
-import { TodoStore } from "./context/StoreProvider.jsx";
+import Header from "./components/Header.js";
+import Tasks from "./components/Tasks.js";
+import Categories from "./components/Categories.js";
 import "./App.css";
-import { useContext } from "react";
-import Modal from "./components/Modal.jsx";
+import Modal from "./components/Modal.js";
+import React from "react";
+import { useStoreContext } from "./hooks/useStoreContext.js";
 
 function App() {
-    const todoStore = useContext(TodoStore);
+    const todoStore = useStoreContext();
 
     return (
         <>

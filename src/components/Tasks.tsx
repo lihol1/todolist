@@ -1,16 +1,18 @@
 import { useEffect } from "react";
-import { getTasks } from "../services";
+import { getTasks } from "../services.js";
 import "../styles/list.css";
-import { useContext } from "react";
-import { TodoStore } from "../context/StoreProvider.jsx";
+import React from "react";
+import { useStoreContext } from "../hooks/useStoreContext.js";
 
 export default function Tasks() {
-    const todoStore = useContext(TodoStore);
-    
+    const todoStore = useStoreContext();
+
     async function getData() {
         const response = await getTasks();
-        const res = await response.json();
-        todoStore.setTasks(res);
+        if (response instanceof Response) {
+            const res = await response.json();
+            todoStore.setTasks(res);
+        }
     }
 
     useEffect(() => {
@@ -21,10 +23,12 @@ export default function Tasks() {
         const curTask = todoStore.tasks.find(
             (task) => task.id === todoStore.editId
         );
-        todoStore.setCurrentTask(curTask);
+        if (curTask !== undefined) {
+            todoStore.setCurrentTask(curTask);
+        }
     }, [todoStore.editId]);
 
-    function handleDel(id) {
+    function handleDel(id: number) {
         todoStore.setAction("delete");
         todoStore.setEditId(id);
         todoStore.setModalIsOpen(true);

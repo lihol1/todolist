@@ -1,20 +1,31 @@
-import { useState, useEffect, useContext } from "react";
-import { TodoStore } from "../context/StoreProvider.jsx";
-import { getCategories, updateCategory } from "../services";
+import { useState } from "react";
 import updateItem from "../utils/updateItem.js";
+import React from "react";
+import { useStoreContext } from "../hooks/useStoreContext.js";
+import { Category } from "../types.js";
 
 export default function CategoryEdit() {
-    const todoStore = useContext(TodoStore);
+    const todoStore = useStoreContext();
 
-    const curTask = todoStore.categories.find(
+    const curCat = todoStore.categories.find(
         (cat) => cat.id === todoStore.editId
     );
 
-    const [values, setValues] = useState(curTask);
+    const [values, setValues] = useState<Category>(curCat ?? ({} as Category));
     const [nameError, setNameError] = useState("");
-    const updateCurrentItem = updateItem(values, todoStore.type, todoStore.setTasks, todoStore.setCategories, todoStore.setModalIsOpen);
+    const updateCurrentItem = updateItem(
+        values,
+        todoStore.type,
+        todoStore.setTasks,
+        todoStore.setCategories,
+        todoStore.setModalIsOpen
+    );
 
-    const handleChange = (e) => {
+    const handleChange = (
+        e:
+            | React.ChangeEvent<HTMLInputElement>
+            | React.ChangeEvent<HTMLTextAreaElement>
+    ) => {
         if (e.target.name === "name") {
             if (!(e.target.value.length >= 2 && e.target.value.length <= 255)) {
                 setNameError("Имя должно содержать от 2 до 255 символов");
@@ -28,10 +39,10 @@ export default function CategoryEdit() {
     function closeModal() {
         todoStore.setModalIsOpen(false);
     }
-    function handleSubmit(e){
+    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         updateCurrentItem();
-    }   
+    }
 
     return (
         <div className="modal__window">
@@ -45,10 +56,7 @@ export default function CategoryEdit() {
                 alt="крестик"
                 onClick={closeModal}
             />
-            <form
-                className="modal__form"
-                onSubmit={handleSubmit}
-            >
+            <form className="modal__form" onSubmit={handleSubmit}>
                 <div className="modal__top">
                     <fieldset className="modal__fieldset">
                         {nameError && (
@@ -75,7 +83,6 @@ export default function CategoryEdit() {
                     <fieldset className="modal__fieldset">
                         <textarea
                             className="modal__textarea"
-                            type="text"
                             id="description"
                             name="description"
                             autoComplete="off"
@@ -91,7 +98,7 @@ export default function CategoryEdit() {
                 <div className="modal__buttonBlock">
                     <button
                         type="submit"
-                        className="modal__btn modal__btn--blue"                        
+                        className="modal__btn modal__btn--blue"
                     >
                         Сохранить
                     </button>

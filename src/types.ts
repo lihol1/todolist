@@ -24,13 +24,18 @@ export type Store = {
     setTasks: Dispatch<SetStateAction<Task[]>>;
     categories: Category [];
     setCategories: Dispatch<SetStateAction<Category []>>;
-    editId: number | null;
-    setEditId: Dispatch<SetStateAction<number | null>>,
+    editId: number;
+    setEditId: Dispatch<SetStateAction<number>>,
     currentTask: Task,
-    setCurrentTask: Dispatch<SetStateAction<Task>>,
-    // currentCat,
-    // setCurrentCat,       
+    setCurrentTask: Dispatch<SetStateAction<Task>>,         
     count: number,
     setCount: Dispatch<SetStateAction<number>>,
-    editTask: (id:number)=>void
+    editTask: (id:number)=>void,
+    addNewTask: (task:Task)=>void,
+    addNewCategory: (cat: Category)=>void,
+    deleteTask: (id: number)=>void,
+    deleteCategory: (id: number)=>void,
+    updateCurrentTask: (task: Task)=>void,
+    updateCurrentCategory: (cat: Category)=>void,
+    // getMaxId: ()=>number
 }

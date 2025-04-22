@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { getTasks } from "../services.js";
+import { fetchTasks } from "../services.js";
 import "../styles/list.css";
 import React from "react";
 import { useStoreContext } from "../hooks/useStoreContext.js";
@@ -8,7 +8,7 @@ export default function Tasks() {
     const todoStore = useStoreContext();
 
     async function getData() {
-        const response = await getTasks();
+        const response = await fetchTasks();
         if (response instanceof Response) {
             const res = await response.json();
             todoStore.setTasks(res);

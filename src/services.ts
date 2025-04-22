@@ -1,7 +1,7 @@
 import { BASE_URL } from "./constants.js";
 import { Task, Category } from "./types";
 
-export async function getTasks(): Promise<Response | string> {
+export async function fetchTasks(): Promise<Response | string> {
     try {
         const response = await fetch(`${BASE_URL}/GetTasks`);
         if (!response.ok) {
@@ -14,7 +14,7 @@ export async function getTasks(): Promise<Response | string> {
     }
 }
 
-export async function addTask(task: Task): Promise<Response | string> {
+export async function fetchAddTask(task: Task): Promise<Response | string> {
     try {
         const response = await fetch(`${BASE_URL}/AddTask`, {
             method: "POST",
@@ -34,7 +34,7 @@ export async function addTask(task: Task): Promise<Response | string> {
     }
 }
 
-export async function updateTask(task: Task): Promise<Response | string> {
+export async function fetchUpdateTask(task: Task): Promise<Response | string> {
     try {
         const response = await fetch(`${BASE_URL}/UpdateTask`, {
             method: "POST",
@@ -55,7 +55,7 @@ export async function updateTask(task: Task): Promise<Response | string> {
     }
 }
 
-export async function removeTask(id: number): Promise<Response | string> {
+export async function fetchRemoveTask(id: number): Promise<Response | string> {
     try {
         const response = await fetch(`${BASE_URL}/RemoveTask/${id}`);
         if (!response.ok) {
@@ -68,7 +68,7 @@ export async function removeTask(id: number): Promise<Response | string> {
     }
 }
 
-export async function getCategories(): Promise<Response | string> {
+export async function fetchCategories(): Promise<Response | string> {
     try {
         const response = await fetch(`${BASE_URL}/GetCategories`);
         if (!response.ok) {
@@ -81,7 +81,7 @@ export async function getCategories(): Promise<Response | string> {
     }
 }
 
-export async function removeCategory(id: number): Promise<Response | string> {
+export async function fetchRemoveCategory(id: number): Promise<Response | string> {
     try {
         const response = await fetch(`${BASE_URL}/RemoveCategory/${id}`);
         if (!response.ok) {
@@ -95,7 +95,7 @@ export async function removeCategory(id: number): Promise<Response | string> {
     }
 }
 
-export async function addCategory(cat: Category): Promise<Response | string> {
+export async function fetchAddCategory(cat: Category): Promise<Response | string> {
     try {
         const response = await fetch(
             "http://localhost:8089/api/ToDoList/AddCategory",
@@ -118,7 +118,7 @@ export async function addCategory(cat: Category): Promise<Response | string> {
     }
 }
 
-export async function updateCategory(
+export async function fetchUpdateCategory(
     cat: Category
 ): Promise<Response | string> {
     try {

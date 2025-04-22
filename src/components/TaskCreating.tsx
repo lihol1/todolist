@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import addItem from "../utils/addItem.js";
 import { useStoreContext } from "../hooks/useStoreContext.js";
 import React from "react";
 import { Task } from "../types.js";
@@ -8,7 +7,7 @@ export default function TaskCreating() {
     const todoStore = useStoreContext();
 
     const [value, setValue] = useState("");
-    const [task, setTask] = useState<Task>();
+    const [task, setTask] = useState<Task>({} as Task);
     const [nameDirty, setNameisDirty] = useState(false);
     const [nameError, setNameError] = useState("Поле не должно быть пустым");
     const [values, setValues] = useState({
@@ -17,16 +16,12 @@ export default function TaskCreating() {
         description: "",
         categoryId: "",
     });
-    const addNewItem = addItem(
-        task,
-        todoStore.type,
-        todoStore.count,
-        todoStore.setCount,
-        todoStore.setTasks,
-        todoStore.setCategories,
-        todoStore.setModalIsOpen
-    );
 
+    // useEffect(() => {
+    //     console.log(task);
+    //     console.log(todoStore.count)
+    // }, [task]);
+    
     useEffect(() => {
         setValues({ ...values, id: todoStore.count });
     }, [todoStore.count]);
@@ -36,8 +31,9 @@ export default function TaskCreating() {
     }, [values, value, todoStore.count]);
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-        e.preventDefault();
-        addNewItem();
+        console.log(task)
+        e.preventDefault();        
+        todoStore.addNewTask(task)
     }
 
     function blurHandler() {
@@ -163,3 +159,4 @@ export default function TaskCreating() {
         </div>
     );
 }
+

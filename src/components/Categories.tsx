@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { getCategories } from "../services.js";
+import { fetchCategories } from "../services.js";
 import "../styles/list.css";
 import React from "react";
 import { useStoreContext } from "../hooks/useStoreContext.js";
@@ -7,8 +7,8 @@ import { useStoreContext } from "../hooks/useStoreContext.js";
 export default function list() {
     const todoStore = useStoreContext();
 
-    async function getData() {
-        const response = await getCategories();
+    async function getData(): Promise<void> {
+        const response = await fetchCategories();
         if (response instanceof Response) {
             const res = await response.json();
             todoStore.setCategories(res);
@@ -19,13 +19,13 @@ export default function list() {
         getData();
     }, []);
 
-    function editCategory(id: number) {
+    function editCategory(id: number): void {
         todoStore.setEditId(id);
         todoStore.setAction("edit");
         todoStore.setModalIsOpen(true);
     }
 
-    function handleDelete(id: number) {
+    function handleDelete(id: number): void {
         todoStore.setAction("delete");
         todoStore.setEditId(id);
         todoStore.setModalIsOpen(true);

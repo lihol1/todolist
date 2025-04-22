@@ -1,5 +1,4 @@
 import { useState } from "react";
-import addItem from "../utils/addItem.js";
 import React from "react";
 import { useStoreContext } from "../hooks/useStoreContext.js";
 
@@ -13,17 +12,7 @@ export default function CategoryCreating() {
         name: "",
         description: "",
     });
-
-    const addCurrentItem = addItem(
-        values,
-        todoStore.type,
-        todoStore.count,
-        todoStore.setCount,
-        todoStore.setTasks,
-        todoStore.setCategories,
-        todoStore.setModalIsOpen
-    );
-
+  
     function blurHandler() {
         setNameIsDirty(true);
     }
@@ -48,7 +37,7 @@ export default function CategoryCreating() {
     }
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        addCurrentItem();
+        todoStore.addNewCategory(values);
     }
 
     return (

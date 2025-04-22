@@ -1,5 +1,4 @@
 import { useState } from "react";
-import updateItem from "../utils/updateItem.js";
 import React from "react";
 import { useStoreContext } from "../hooks/useStoreContext.js";
 import { Category } from "../types.js";
@@ -13,13 +12,7 @@ export default function CategoryEdit() {
 
     const [values, setValues] = useState<Category>(curCat ?? ({} as Category));
     const [nameError, setNameError] = useState("");
-    const updateCurrentItem = updateItem(
-        values,
-        todoStore.type,
-        todoStore.setTasks,
-        todoStore.setCategories,
-        todoStore.setModalIsOpen
-    );
+    
 
     const handleChange = (
         e:
@@ -41,7 +34,7 @@ export default function CategoryEdit() {
     }
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        updateCurrentItem();
+        todoStore.updateCurrentCategory(values);
     }
 
     return (

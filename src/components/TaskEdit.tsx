@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import updateItem from "../utils/updateItem.js";
 import React from "react";
 import { Task } from "../types.js";
 import { useStoreContext } from "../hooks/useStoreContext.js";
@@ -20,14 +19,7 @@ export default function TaskEdit() {
         description: curTask?.description ?? "",
         categoryId: +value,
     });
-    const updateCurrentItem = updateItem(
-        values,
-        todoStore.type,
-        todoStore.setTasks,
-        todoStore.setCategories,
-        todoStore.setModalIsOpen
-    );
-
+    
     useEffect(() => {
         setValues({ ...values, categoryId: +value });
     }, [value]);
@@ -52,7 +44,7 @@ export default function TaskEdit() {
     };
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        updateCurrentItem();
+        todoStore.updateCurrentTask(values);
     }
 
     return (

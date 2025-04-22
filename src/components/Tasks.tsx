@@ -3,14 +3,15 @@ import { fetchTasks } from "../services.js";
 import "../styles/list.css";
 import React from "react";
 import { useStoreContext } from "../hooks/useStoreContext.js";
+import { Task } from "../types.js";
 
 export default function Tasks() {
     const todoStore = useStoreContext();
 
-    async function getData() {
+    async function getData(): Promise<void> {
         const response = await fetchTasks();
         if (response instanceof Response) {
-            const res = await response.json();
+            const res = await response.json() as Task[];
             todoStore.setTasks(res);
         }
     }

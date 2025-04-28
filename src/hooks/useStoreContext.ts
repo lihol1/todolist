@@ -5,7 +5,7 @@ export function useStoreContext() {
     const store = useContext(TodoStore);
 
     if (store === null) {
-        throw new Error("Type of todoStore is undefined")
+        throw new Error("Type of todoStore is undefined");
     }
 
     return store;

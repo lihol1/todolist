@@ -1,4 +1,4 @@
-import { createContext, PropsWithChildren, useState } from "react";
+import { createContext, PropsWithChildren, useEffect, useState } from "react";
 import { Store, Task, Category } from "../types";
 import {
     fetchTasks,
@@ -12,9 +12,7 @@ import {
 } from "../services";
 import React from "react";
 
-function StoreProvider({ children } : PropsWithChildren) { 
-    
-
+function StoreProvider({ children }: PropsWithChildren) {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
     const [type, setType] = useState<string>("task");
@@ -22,8 +20,7 @@ function StoreProvider({ children } : PropsWithChildren) {
     const [action, setAction] = useState("create");
     const [editId, setEditId] = useState<number>(0);
 
-    
-    // const [count, setCount] = useState<number>(getMaxId()?? 0);
+    // const [count, setCount] = useState<number>(getMaxId()+1);
     const [count, setCount] = useState<number>(0);
     const [currentTask, setCurrentTask] = useState<Task>({
         id: 0,
@@ -56,27 +53,55 @@ function StoreProvider({ children } : PropsWithChildren) {
         deleteCategory,
         updateCurrentTask,
         updateCurrentCategory,
-        // getMaxId
+        getMaxId,
     };
 
-    // function getMaxId(): number {
-    //     let maxId: number=0;
-    //     if(type === 'task') {
-    //         if(tasks) {
-    //             const taskIds: number[] = tasks.map((task)=>task.id)
-    //             console.log(1, Math.max(...taskIds))
-    //             maxId = Math.max(...taskIds);             
-    //         }
-    //     } else {
-    //         const catIds: number[] = categories.map((cat)=>cat.id)
-    //         console.log(2, Math.max(...catIds))
-    //         if(categories)
-    //         maxId = Math.max(...catIds)            
-    //     }
-    //     console.log(maxId)
-    //     return maxId        
-    // }
-    
+    async function getItemsCount(): Promise<void> {
+        const promise1: Promise<Task[]> = new Promise((resolve) => {
+            resolve(
+                fetchTasks().then((res) => {
+                    if (res instanceof Response) {
+                        return res.json();
+                    }
+                })
+            );
+        });
+        const promise2: Promise<Category[]> = new Promise((resolve) => {
+            resolve(
+                fetchCategories().then((res) => {
+                    if (res instanceof Response) {
+                        return res.json();
+                    }
+                })
+            );
+        });
+
+        const resp = await Promise.allSettled([promise1, promise2]);  
+        const arr: Task | Category[] = [];
+        resp.forEach((res) => {
+            arr.push(res.value);
+        });
+
+        setCount(getMaxId(arr) + 1);
+    }
+
+    useEffect(() => {
+        getItemsCount();
+    }, []);
+
+    function getMaxId(arr: Task | Category[]): number {
+        let maxId: number = 0;        
+        let arr2: number[] = [];
+
+        for (let i: number = 0; i < arr.length; i++) {
+            const temp: number[] = arr[i].map(
+                (item: Task | Category) => item.id
+            );
+            arr2.push(...temp);
+        }
+        maxId = Math.max(...arr2);
+        return maxId;
+    }
 
     function editTask(id: number) {
         setEditId(id);
@@ -84,7 +109,7 @@ function StoreProvider({ children } : PropsWithChildren) {
         setModalIsOpen(true);
     }
 
-    function addNewTask(task: Task) {
+    function addNewTask(task: Task) {      
         setCount(count + 1);
 
         fetchAddTask(task)
@@ -92,7 +117,7 @@ function StoreProvider({ children } : PropsWithChildren) {
                 return fetchTasks();
             })
             .then((response) => {
-                if(response instanceof Response) return response.json();
+                if (response instanceof Response) return response.json();
             })
             .then((res: Task[]) => {
                 console.log(res);
@@ -107,7 +132,7 @@ function StoreProvider({ children } : PropsWithChildren) {
                 return fetchCategories();
             })
             .then((response) => {
-                if(response instanceof Response) return response.json();
+                if (response instanceof Response) return response.json();
             })
             .then((res: Category[]) => {
                 console.log(res);
@@ -121,7 +146,7 @@ function StoreProvider({ children } : PropsWithChildren) {
                 return fetchTasks();
             })
             .then((response) => {
-                if(response instanceof Response) return response.json();
+                if (response instanceof Response) return response.json();
             })
             .then((res) => {
                 console.log(res);
@@ -135,7 +160,7 @@ function StoreProvider({ children } : PropsWithChildren) {
                 return fetchCategories();
             })
             .then((response) => {
-                if(response instanceof Response) return response.json();
+                if (response instanceof Response) return response.json();
             })
             .then((res) => {
                 console.log(res);
@@ -149,7 +174,7 @@ function StoreProvider({ children } : PropsWithChildren) {
                 return fetchTasks();
             })
             .then((response) => {
-                if(response instanceof Response) return response.json();
+                if (response instanceof Response) return response.json();
             })
             .then((res) => {
                 setTasks(res);
@@ -162,7 +187,7 @@ function StoreProvider({ children } : PropsWithChildren) {
                 return fetchCategories();
             })
             .then((response) => {
-                if(response instanceof Response) return response.json();
+                if (response instanceof Response) return response.json();
             })
             .then((res) => {
                 console.log(res);

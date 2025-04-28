@@ -13,8 +13,17 @@ export default function Tasks() {
         if (response instanceof Response) {
             const res = await response.json() as Task[];
             todoStore.setTasks(res);
+            // async function setNextCount(){
+            //    const promise = new Promise((resolve)=>{
+            //     resolve(todoStore.setTasks(res));
+            // // })
+            
+            // promise.then(()=>{
+            //     getMaxId()+1
+            // });
+            }
         }
-    }
+    
 
     useEffect(() => {
         getData();

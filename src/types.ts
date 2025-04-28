@@ -37,5 +37,5 @@ export type Store = {
     deleteCategory: (id: number)=>void,
     updateCurrentTask: (task: Task)=>void,
     updateCurrentCategory: (cat: Category)=>void,
-    // getMaxId: ()=>number
+    getMaxId: (arr: Task | Category [])=>number
 }

@@ -17,11 +17,6 @@ export default function TaskCreating() {
         categoryId: "",
     });
 
-    // useEffect(() => {
-    //     console.log(task);
-    //     console.log(todoStore.count)
-    // }, [task]);
-    
     useEffect(() => {
         setValues({ ...values, id: todoStore.count });
     }, [todoStore.count]);
@@ -30,10 +25,9 @@ export default function TaskCreating() {
         setTask({ ...values, id: todoStore.count, categoryId: +value });
     }, [values, value, todoStore.count]);
 
-    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-        console.log(task)
-        e.preventDefault();        
-        todoStore.addNewTask(task)
+    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {       
+        e.preventDefault();
+        todoStore.addNewTask(task);
     }
 
     function blurHandler() {
@@ -159,4 +153,3 @@ export default function TaskCreating() {
         </div>
     );
 }
-

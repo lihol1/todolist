@@ -81,7 +81,9 @@ export async function fetchCategories(): Promise<Response | string> {
     }
 }
 
-export async function fetchRemoveCategory(id: number): Promise<Response | string> {
+export async function fetchRemoveCategory(
+    id: number
+): Promise<Response | string> {
     try {
         const response = await fetch(`${BASE_URL}/RemoveCategory/${id}`);
         if (!response.ok) {
@@ -95,7 +97,9 @@ export async function fetchRemoveCategory(id: number): Promise<Response | string
     }
 }
 
-export async function fetchAddCategory(cat: Category): Promise<Response | string> {
+export async function fetchAddCategory(
+    cat: Category
+): Promise<Response | string> {
     try {
         const response = await fetch(
             "http://localhost:8089/api/ToDoList/AddCategory",

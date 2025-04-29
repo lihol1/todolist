@@ -1,16 +1,17 @@
-
 import React from "react";
 import { useStoreContext } from "../hooks/useStoreContext.js";
 
 export default function ItemDelete() {
     const todoStore = useStoreContext();
-   
-    function deleteCurrentItem(){
-        if(typeof(todoStore) !==null){
-            todoStore.type === "task" ? todoStore.deleteTask(todoStore.editId) : todoStore.deleteCategory(todoStore.editId)
-        }  
+
+    function deleteCurrentItem() {
+        if (typeof todoStore !== null) {
+            todoStore.type === "task"
+                ? todoStore.deleteTask(todoStore.editId)
+                : todoStore.deleteCategory(todoStore.editId);
+        }
     }
-    
+
     const itemName =
         todoStore.type === "task"
             ? todoStore.tasks.find((task) => task.id === todoStore.editId)?.name

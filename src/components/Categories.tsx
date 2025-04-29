@@ -11,7 +11,7 @@ export default function list() {
     async function getData(): Promise<void> {
         const response = await fetchCategories();
         if (response instanceof Response) {
-            const res = await response.json() as Category[];
+            const res = (await response.json()) as Category[];
             todoStore.setCategories(res);
         }
     }

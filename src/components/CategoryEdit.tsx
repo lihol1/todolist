@@ -12,7 +12,6 @@ export default function CategoryEdit() {
 
     const [values, setValues] = useState<Category>(curCat ?? ({} as Category));
     const [nameError, setNameError] = useState("");
-    
 
     const handleChange = (
         e:

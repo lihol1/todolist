@@ -19,7 +19,7 @@ export default function TaskEdit() {
         description: curTask?.description ?? "",
         categoryId: +value,
     });
-    
+
     useEffect(() => {
         setValues({ ...values, categoryId: +value });
     }, [value]);

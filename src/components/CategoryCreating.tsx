@@ -12,7 +12,7 @@ export default function CategoryCreating() {
         name: "",
         description: "",
     });
-  
+
     function blurHandler() {
         setNameIsDirty(true);
     }

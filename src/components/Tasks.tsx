@@ -11,19 +11,10 @@ export default function Tasks() {
     async function getData(): Promise<void> {
         const response = await fetchTasks();
         if (response instanceof Response) {
-            const res = await response.json() as Task[];
+            const res = (await response.json()) as Task[];
             todoStore.setTasks(res);
-            // async function setNextCount(){
-            //    const promise = new Promise((resolve)=>{
-            //     resolve(todoStore.setTasks(res));
-            // // })
-            
-            // promise.then(()=>{
-            //     getMaxId()+1
-            // });
-            }
         }
-    
+    }
 
     useEffect(() => {
         getData();

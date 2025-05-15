@@ -1,0 +1,53 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:regular,500&display=swap);
+@import "styles/reset.css";
+
+:root {
+    --main: #3f72af;
+    --secondary: #dbe2ef;
+    --light-blue: #8fb6ff;
+    --hover-blue: rgba(37, 127, 234, 0.2);
+    --grey: #808080;
+    --red: #ec1d1d;
+}
+
+/* #root { */
+/* min-width: 1440px;
+  max-width: 1920px;
+  margin: 0 auto;   */
+/* } */
+
+body {
+    background: var(--secondary);
+    font-size: 18px;
+    line-height: 1.1;
+    font-family: "Roboto", sans-serif;
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+    font-weight: 400;
+}
+
+input,
+button,
+select,
+textarea {
+    font-size: 20px;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+}
+input,
+textarea {
+    color: #000;
+}
+
+select {
+    color: var(--grey);
+}
+
+button + button {
+    margin-left: 24px;
+}
